@@ -1,0 +1,6 @@
+tmp
+logs/*
+user_guide
+*.swp
+*.swo
+cache/*

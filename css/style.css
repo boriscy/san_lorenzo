@@ -1,0 +1,72 @@
+body{
+  font-family: Arial, helvetia;
+  font-size: 0.9em;
+  padding: 0px;
+  margin: 0px;
+}
+
+
+#wrapper{
+  width: 832px;
+  margin: auto;
+  background-color: #FEEBB7;
+}
+
+#header{
+  background: transparent url(images/san_lorenzo.png);
+  height: 215px;
+}
+
+#cont{
+  padding: 10px 20px 50px;
+  border-left: 2px solid #FEC01F;
+  border-right: 2px solid #FEC01F;
+  border-bottom: 2px solid #FEC01F;
+}
+
+
+#notice{
+  width: 400px;
+  background-color:#DBFFDB;
+  font-weight: bold;
+  border: 2px solid #00FF00;
+  padding: 10px 20px;
+}
+
+#error{
+  width: 400px;
+  color: #CB0000;
+  background-color:#FFD8D8;
+  font-weight: bold;
+  border: 2px solid #CB0000;
+  padding: 10px 20px;
+}
+
+
+label{
+  color: ##383838;
+  font-weight: bold;
+  display: block;
+}
+
+
+.fl{
+  float: left;
+}
+
+.submit{
+  clear: both;
+  padding: 20px 100px;
+}
+
+.input{
+  margin: 5px 0px 10px;
+}
+form p{
+  color: #CB0000;
+  margin: 0px;
+  padding: 0px;
+  font-size: 0.95em;
+}
+
+
