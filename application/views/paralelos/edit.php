@@ -3,8 +3,8 @@
   <?php echo hidden('id', $vals) ?>
   <div class="fl" style="">
 
-    <?php echo input('curso', 'Curso', $vals) ?>
     <?php echo input('nivel', 'Nivel', $vals) ?>
+    <?php echo input('curso', 'Curso', $vals) ?>
     <?php echo input('paralelo', 'Paralelo', $vals) ?>
 
   </div>

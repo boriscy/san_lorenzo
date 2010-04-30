@@ -3,8 +3,8 @@
 
   <div class="fl" style="">
 
-    <?php echo input('curso', 'Curso') ?>
     <?php echo input('nivel', 'Nivel') ?>
+    <?php echo input('curso', 'Curso') ?>
     <?php echo input('paralelo', 'Paralelo') ?>
 
   </div>

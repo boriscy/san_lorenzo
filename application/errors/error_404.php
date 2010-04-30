@@ -1,6 +1,7 @@
 <html>
 <head>
-<title>404 Page Not Found</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<title>404 Página no encotrada</title>
 <style type="text/css">
 
 body {

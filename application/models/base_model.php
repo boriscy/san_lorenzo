@@ -43,6 +43,59 @@ class Base_model extends Model
   }
 
   /**
+   * Creates a list for the
+   * The array must be the way
+   * array(
+   *  'labelField' => 'label',
+   *  'valueField' => 'field',
+   *  'order' => 'order',
+   *  'considitons' => 'coditions'
+   * )
+   * @param array
+   * @return array
+   */
+  function getList($options) {
+    $default = array(
+      'order' => '',
+      'conditions' => '',
+      'valueField' => 'id'
+    );
+    $options = array_merge($default, $options);
+    if(!isset($options['labelField']) || !isset($options['valueField'])) {
+      echo "You must set the labelField and the valueField for getting a list";
+    }
+
+    if($options['conditions'] != '')
+      $options['conditions'] = " WHERE ".$options['conditions'];
+    if($options['order'] != '')
+      $options['order'] = "ORDER BY ".$options['order'];
+
+    $query = "SELECT {$options['valueField']}, {$options['labelField']} FROM {$this->table} {$options['conditions']} {$options['order']}";
+    $q = $this->db->query($query);
+    $ret = array();
+    if(preg_match('/,/', $options['labelField']) ) {
+      $labels = preg_split('/,/', $options['labelField']);
+      foreach($labels as $k => $v) {
+        $labels[$k] = trim($v);
+      }
+    }
+
+    foreach($q->result() as $row) {
+      if(isset($labels)) {
+        $arr = array();
+        foreach($labels as $v) {
+          array_push($arr, $row->{$v});
+        }
+        $ret[$row->{$options['valueField']}] = join($arr, ' ');
+      }else{
+        $ret[$row->{$options['valueField']}] = $row->{$options['labelField']};
+      }
+    }
+
+    return $ret;
+  }
+
+  /**
    * Finds one record with just a and value
    */
   function findByField($field,$value, $limit=1, $offset=0) {

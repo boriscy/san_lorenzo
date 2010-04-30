@@ -156,6 +156,12 @@ a.new{
   font-size: 1.2em;
 }
 
+a.curso{
+  background: transparent url(images/group_add.png) no-repeat;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
 a.new:hover{
   text-decoration: underline;
 }

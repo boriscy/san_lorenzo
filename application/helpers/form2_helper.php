@@ -1,15 +1,15 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-if(!function_exists('input'))
-{
-  /**
-   * Creates an input
-   * @param string
-   * @param string
-   * @param array Used to repopulate the field in case of an edit
-   */
-  function input($name, $label, $values=array() ) {
-    $html =  '<div class="input">';
+  if(!function_exists('input'))
+  {
+    /**
+     * Creates an input
+     * @param string
+     * @param string
+     * @param array Used to repopulate the field in case of an edit
+     */
+    function input($name, $label, $values=array() ) {
+      $html =  '<div class="input">';
     $html.= "<label>{$label}</label>";
     $config = array(
       'name' => $name,
@@ -22,6 +22,39 @@ if(!function_exists('input'))
     return $html;
   }
 }
+
+if(!function_exists('checkbox'))
+{
+  /**
+   * Creates an input
+   * @param string
+   * @param string
+   * @param array Used to repopulate the field in case of an edit
+   */
+  function checkbox($name, $label, $values=array() ) {
+    $html =  '<div class="input"><input type="hidden" name="'.$name.'" value="0" />';
+    $config = array(
+      'name' => $name,
+      'value' => '1',
+      'checked' => get_form_value($name, $values),
+      'size' => '30'
+    );
+
+    if(isset($config['value'])) {
+      $value = true;
+    }else{
+      $value = false;
+    }
+
+    $html.= "<label>";
+    $html.= form_checkbox($config, $value);
+    $html.= "{$label}</label>";
+    $html.= form_error($name);
+    $html.= '</div>';
+    return $html;
+  }
+}
+
 
 if(!function_exists('password')) 
 {
@@ -74,6 +107,38 @@ if(!function_exists('radio'))
     return $html;
   }
 }
+
+
+if(!function_exists('select'))
+{
+  /**
+   * Creates a radio button
+   * @param string
+   * @param string
+   * @param string
+   * @param array
+   * @return string
+   */
+  function select($name, $label, $value, $options) {
+    $html = '<div class="input">';
+    $html.= "<label>$label</label>";
+    $html.= "<select name=\"$name\">";
+    if(trim($value) == '')
+      $value = get_form_value($name);
+
+    $html.= '<option></option>';
+    foreach($options as $k => $v) {
+      $checked = $value == $k ? 'selected="true" ' : '';
+      $html.= "<option value='$k' $checked />$v</option>";
+    }
+    $html.= '</select>';
+    $html.= form_error($name);
+    $html.= '</div>';
+    return $html;
+  }
+}
+
+
 
 if(!function_exists('get_form_value'))
 {
@@ -155,5 +220,29 @@ if(!function_exists('link_to'))
     }
     $html.= '>' . $title . '</a>';
     return $html;
+  }
+}
+
+
+if(!function_exists('activo')) 
+{
+  function activo($val) {
+    if($val) {
+      return "Sí";
+    }else{
+      return "No";
+    }
+  }
+}
+
+if(!function_exists('is_ajax'))
+{
+  function is_ajax()
+  {
+    if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+      return true;
+    }else{
+      return false;
+    }
   }
 }

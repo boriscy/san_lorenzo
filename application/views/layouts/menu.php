@@ -3,6 +3,8 @@
   <li><?php echo link_to("Usuarios", '/usuarios') ?></li>
   <li><?php echo link_to("Materias", '/materias') ?></li>
   <li><?php echo link_to("Paralelos", '/paralelos') ?></li>
+  <li><?php echo link_to("Cursos", '/cursos') ?></li>
+  <li><?php echo link_to("Alumnos", '/alumnos') ?></li>
   <li><?php echo link_to("Notas", '/notas') ?></li>
   <li><?php echo link_to("Salir", '/login/destroy') ?></li>
 </ul>

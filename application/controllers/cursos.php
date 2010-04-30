@@ -10,6 +10,9 @@ class Cursos extends Base
   public function __construct() {
     parent::Controller();
     $this->load->model('Curso_model');
+    $this->load->model('Usuario_model');
+    $this->load->model('Paralelo_model');
+    $this->load->model('Materia_model');
     // Credenciales para el controlador
     $this->credentials = array(
       'index' => array('admin'),
@@ -26,9 +29,9 @@ class Cursos extends Base
    * index
    */
   public function index() {
-    $data['materias'] = $this->Materia_model->getAll();
+    $data['cursos'] = $this->Curso_model->getAll();
 
-    $data['template'] = 'materias/index';
+    $data['template'] = 'cursos/index';
     $this->load->view('layouts/application', $data);
   }
 
@@ -37,13 +40,22 @@ class Cursos extends Base
    */
   public function create() {
     $this->formValidations();
-    if(isset($_POST['nombre']) && $this->form_validation->run() == TRUE) {
-      $this->Materia_model->create($_POST);
-      redirect('/materias');
+    if(isset($_POST['anio']) && $this->form_validation->run() == TRUE) {
+      $this->Curso_model->create($_POST);
+      redirect('/cursos');
     }else{
-      if(isset($_POST['nombre']) )
+      if(isset($_POST['curso']) )
         $this->session->set_flashdata('error', 'Existen errores en le formulario');
-      $data['template'] = 'materias/create';
+
+      $data['profesores'] = $this->Usuario_model->getList(array(
+        'labelField'=>'primer_nombre, segundo_nombre, paterno, materno', 
+        'order' => 'primer_nombre, segundo_nombre, paterno, materno ASC',
+        'conditions' => 'tipo="profe"'
+      ));
+      $data['materias'] = $this->Materia_model->getList(array('labelField'=>'nombre', 'order' => 'nombre ASC'));
+      $data['paralelos'] = $this->Paralelo_model->getList(array('labelField'=>'nivel, curso, paralelo', 'order' => 'nivel, curso, paralelo ASC'));
+
+      $data['template'] = 'cursos/create';
       $this->load->view('layouts/application', $data);
     }
   }
@@ -53,8 +65,16 @@ class Cursos extends Base
    */
   public function edit($id) {
 
-    $data['vals'] = $this->Materia_model->getId($id);
-    $data['template'] = 'materias/edit';
+    $data['profesores'] = $this->Usuario_model->getList(array(
+      'labelField'=>'primer_nombre, segundo_nombre, paterno, materno', 
+      'order' => 'primer_nombre, segundo_nombre, paterno, materno ASC',
+      'conditions' => 'tipo="profe"'
+    ));
+    $data['materias'] = $this->Materia_model->getList(array('labelField'=>'nombre', 'order' => 'nombre ASC'));
+    $data['paralelos'] = $this->Paralelo_model->getList(array('labelField'=>'nivel, curso, paralelo', 'order' => 'nivel, curso, paralelo ASC'));
+    $data['vals'] = $this->Curso_model->getId($id);
+
+    $data['template'] = 'cursos/edit';
     $this->load->view('layouts/application', $data);
   }
 
@@ -65,15 +85,15 @@ class Cursos extends Base
 
     $this->formValidations();
     if($this->form_validation->run() == TRUE) {
-      $this->Materia_model->update($_POST); 
-      $this->session->set_flashdata('notice', 'Se actualizo correctamente la materia');
-      redirect('/materias');
+      $this->Curso_model->update($_POST); 
+      $this->session->set_flashdata('notice', 'Se actualizo correctamente el curso');
+      redirect('/cursos');
     }else{
       $this->session->set_flashdata('error', 'Existen errores en su formulario');
     }
 
     $data['vals'] = array();
-    $data['template'] = 'materias/edit';
+    $data['template'] = 'cursos/edit';
     $this->load->view('layouts/application', $data);
   }
 
@@ -82,22 +102,19 @@ class Cursos extends Base
    * destroy
    */
   public function destroy($id, $token) {
-    if($this->Materia_model->destroy($id, $token) ) {
-      $this->session->set_flashdata('notice', 'Se ha borrado correctamente la materia');
+    if($this->Curso_model->destroy($id, $token) ) {
+      $this->session->set_flashdata('notice', 'Se ha borrado correctamente el curso');
     }else{
-      $this->session->set_flashdata('error', 'No fue posible borrar correctamente la materia');
+      $this->session->set_flashdata('error', 'No fue posible borrar correctamente el curso');
     }
-    redirect('materias');
+    redirect('cursos');
   }
 
 
   protected function formValidations() {
-		$this->form_validation->set_rules('nombre', 'nombre', 'required|trim');
-		$this->form_validation->set_rules('codigo', 'código', 'required|callback_unique_codigo|trim');
-  }
-
-  function unique_codigo($str) {
-    $this->form_validation->set_message('unique_codigo', 'El código de la materia debe ser único');
-    return $this->Materia_model->uniquenessOfField('codigo', $str);
+		$this->form_validation->set_rules('anio', 'año', 'required|numeric|trim');
+		$this->form_validation->set_rules('materia_id', 'materia', 'required');
+		$this->form_validation->set_rules('usuario_id', 'profesor', 'required');
+		$this->form_validation->set_rules('paralelo_id', 'paralelo', 'required');
   }
 }
