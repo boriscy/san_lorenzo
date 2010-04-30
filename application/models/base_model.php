@@ -58,16 +58,51 @@ class Base_model extends Model
   /**
    * Verigfica que el campo sea unico
    */
-  function uniquenessOfField($field, $val){
-    $q = $this->db->query("SELECT * FROM {$this->table} WHERE {$field}='$val'");
+  function uniquenessOfField($field, $val) {
+    $sql = "SELECT * FROM {$this->table} WHERE {$field}='$val'";
+    if(isset($_POST['id'])){
+      $id = intval($_POST['id']);
+      $sql.= " AND id<>$id";
+    }
+
+    $q = $this->db->query($sql);
     return !($q->num_rows() > 0);
   }
 
   /**
    * Crea un nuevo item
+   * @param array
    */
   function create($params) {
     $params = $this->intersectFields($params);
     $this->db->insert($this->table, $params);
+    return $this->db->insert_id();
   }
+
+  /**
+   * Actualiza un item
+   * @param array
+   */
+  function update($params) {
+    $this->db->where('id', $params['id']);
+    unset($params['id']);
+    $params = $this->intersectFields($params);
+    return $this->db->update($this->table, $params);
+  }
+
+  /**
+   * Borra un item
+   * @param string
+   * @param string
+   * @return mixed
+   */
+  function destroy($id, $token) {
+    if( $this->session->userdata('token') == $token ){
+      $this->db->where('id', $id);
+      return $this->db->delete($this->table);
+    }else{
+      return false;
+    }
+  }
+
 }

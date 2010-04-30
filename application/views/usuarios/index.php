@@ -1,7 +1,7 @@
-<h1>Lista de usuarios</h1>
+<h1>Usuarios</h1>
 
-<?php echo link_to("Nuevo", '/usuarios/create', array('class' => 'new') ) ?>
-<table>
+<?php echo link_to("Nuevo usuario", '/usuarios/create', array('class' => 'new') ) ?>
+<table class="decorated">
   <tr>
     <th>Nombre completo</th>
     <th>Usuario</th>

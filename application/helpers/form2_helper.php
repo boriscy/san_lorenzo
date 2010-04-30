@@ -11,7 +11,12 @@ if(!function_exists('input'))
   function input($name, $label, $values=array() ) {
     $html =  '<div class="input">';
     $html.= "<label>{$label}</label>";
-    $html.= form_input($name, get_form_value($name, $values) );
+    $config = array(
+      'name' => $name,
+      'value' => get_form_value($name, $values),
+      'size' => '30'
+    );
+    $html.= form_input($config);
     $html.= form_error($name);
     $html.= '</div>';
     return $html;
@@ -23,13 +28,52 @@ if(!function_exists('password'))
   function password($name, $label) {
     $html =  '<div class="input">';
     $html.= "<label>{$label}</label>";
-    $html.= form_password($name);
+    $config = array(
+      'name' => $name,
+      'size' => '30'
+    );
+    $html.= form_password($config);
     $html.= form_error($name);
     $html.= '</div>';
     return $html;
   }
 }
 
+if(!function_exists('hidden')) 
+{
+  function hidden($name, $values = array()) {
+    return form_hidden($name, get_form_value($name, $values));
+  }
+}
+
+
+if(!function_exists('radio'))
+{
+  /**
+   * Creates a radio button
+   * @param string
+   * @param string
+   * @param string
+   * @param array
+   * @return string
+   */
+  function radio($name, $label, $value, $options) {
+    $html = "<fieldset><legend>$label</legend>";
+    $id = preg_replace('/\[/', '_', $name);
+    $id = preg_replace('/]/', '', $id);
+    if(trim($value) == '')
+      $value = get_form_value($name);
+
+    foreach($options as $k => $v) {
+      $_id = $id . '_' . $k;
+      $checked = $value == $k ? 'checked="true" ' : '';
+      $html.= "<label><input type='radio' id='$_id' name='$name' value='$k' $checked />$v</label>";
+    }
+    $html.= form_error($name);
+    $html.='</fieldset>';
+    return $html;
+  }
+}
 
 if(!function_exists('get_form_value'))
 {
@@ -99,6 +143,12 @@ if(!function_exists('link_to'))
    * @return string
    */
   function link_to($title, $url, $options=array()) {
+    global $token;
+    if(isset($options['delete'])) {
+      $url.= '/' . $options['delete'];
+      unset($options['delete']);
+      $options['data-delete'] = 'true';
+    }
     $html = '<a href="' . site_url($url) . '"';
     foreach($options as $k => $v) {
       $html.= ' '.$k.'="'.$v.'"';

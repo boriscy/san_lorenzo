@@ -1,7 +1,7 @@
 <?php
 
 $lang['profiler_database']		  = 'BASE DE DATOS';
-$lang['profiler_controller_info'] = 'CLASE/MÉTODO';
+$lang['profiler_controller_info'] = 'CLASE/MÃ‰TODO';
 $lang['profiler_benchmarks']	= 'BENCHMARKS';
 $lang['profiler_queries']		= 'CONSULTAS';
 $lang['profiler_get_data']		= 'DATOS GET';

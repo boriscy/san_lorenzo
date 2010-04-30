@@ -5,10 +5,15 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title>Colegio</title>
   <link rel="stylesheet" href="<?php echo base_url();?>system/css/style.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/app.js"></script>
 </head>
   <body>
     <div id="wrapper">
       <div id="header">
       </div>
+      <?php if($this->session->userdata('usuario_id')): ?>
+        <?php $this->load->view('/layouts/menu') ?>
+      <?php endif; ?>
       <div id="cont">
 

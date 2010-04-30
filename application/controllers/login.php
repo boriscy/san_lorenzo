@@ -21,7 +21,8 @@ class Login extends Controller
         $this->session->set_userdata( array(
           'usuario_nombre' => Usuario_model::nombreCompleto($usuario), 
           'usuario_id' => $usuario->id,
-          'usuario_tipo' => $usuario->tipo //Nivel de acceso
+          'usuario_tipo' => $usuario->tipo, //Nivel de acceso
+          'token' => md5(rand())// Necesario para seguridad
           )
         );
         $this->session->set_flashdata('notice', "Usted a ingresado correctamente");
@@ -47,17 +48,11 @@ class Login extends Controller
    * Funcion de acceso una ves logueado
    */
   function access() {
-    $this->credentials('access');
+    if(!$this->session->userdata('usuario_id') ) {
+      redirect("/login");
+    }
     $data['template'] = 'login/access';
     $this->load->view('layouts/application', $data);
   }
 
-  /**
-   * Revisa los permisos de un usuario
-   */
-  private function credentials($action) {
-    if(!$this->session->userdata('usuario_id')) {
-      redirect("/login");
-    }
-  }
 }

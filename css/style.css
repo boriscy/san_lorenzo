@@ -1,15 +1,16 @@
 body{
-  font-family: Arial, helvetia;
-  font-size: 0.9em;
+  font-family: Lucida Grande, Verdana, Sans-serif;
+  font-size: 0.80em;
   padding: 0px;
   margin: 0px;
+  background-color: #FEEBB7;
 }
 
 
 #wrapper{
   width: 832px;
   margin: auto;
-  background-color: #FEEBB7;
+  background-color: #FFF;
 }
 
 #header{
@@ -28,6 +29,7 @@ body{
 #notice{
   width: 400px;
   background-color:#DBFFDB;
+  color: #003000;
   font-weight: bold;
   border: 2px solid #00FF00;
   padding: 10px 20px;
@@ -43,12 +45,94 @@ body{
 }
 
 
+#warning{
+  width: 400px;
+  background-color:#FFFFC5;
+  font-weight: bold;
+  border: 2px solid #FFFF00;
+  padding: 10px 20px;
+  color: #3D3D00;
+}
+
+#menu{
+  display: block;
+  height: 30px;
+  padding: 0px;
+  margin: 0px;
+  background-color:#28256A;
+}
+#menu li{
+  float: left;
+  display: inline-block;
+  list-style: none;
+}
+
+#menu a{
+  display: block;
+  text-decoration: none;
+  color: #FFF;
+  font-weight: bold;
+  padding: 7px 10px;
+  border-right: 1px solid #1E1A57;
+  border-left: 1px solid #4C4786;
+}
+
+
+#menu a:hover{
+  color: #28256A;
+  background-color: #FBAF1B;
+}
+
+
+/*************************************************/
+
 label{
   color: ##383838;
   font-weight: bold;
   display: block;
 }
 
+legend{
+  color: #535353;
+  font-weight: bold;
+}
+
+form p{
+  color: #CB0000;
+  margin: 0px;
+  padding: 0px;
+  font-size: 0.95em;
+}
+
+input[type=submit], button{
+  font-size: 1.4em;
+  font-weight: bold;
+}
+input[type=checkbox]{
+  vertical-align: middle;
+}
+
+
+table.decorated{
+  border-collapse: collapse;
+  border: 1px solid #E4E4E4;
+  margin: 8px 0px;
+}
+
+table.decorated tr{
+  border-bottom: 1px solid #BFBFBF;
+}
+
+table.decorated th{
+  padding: 5px 8px;
+  text-align: left;
+  background-color: #E4E4E4;
+}
+
+table.decorated td{
+  padding: 5px 8px;
+}
+/**********************************************/
 
 .fl{
   float: left;
@@ -62,11 +146,34 @@ label{
 .input{
   margin: 5px 0px 10px;
 }
-form p{
-  color: #CB0000;
-  margin: 0px;
-  padding: 0px;
-  font-size: 0.95em;
+
+a.new{
+  font-weight: bold;
+  background: transparent url(images/add.png) no-repeat;
+  padding-left: 20px;
+  color: #28256A;
+  text-decoration: none;
+  font-size: 1.2em;
 }
 
+a.new:hover{
+  text-decoration: underline;
+}
 
+.marked{
+  background-color: #F28151;
+}
+
+ul.half{
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 10px;
+  clear: both;
+  display: block;
+}
+ul.half li{
+  display: inline: block;
+  width: 49%;
+  float: left;
+}

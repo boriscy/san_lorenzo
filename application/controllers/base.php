@@ -4,6 +4,11 @@
  */
 class Base extends Controller
 {
+  function __construct() {
+    parent::Controller();
+  }
+
+
   // Variable que almacena las credenciales de la siguiente forma
   // $credentials['index'] = array('admin', 'profe', 'editor'); // 'admin', 'profe' y 'editor' tienen permiso
   // $credentials['edit'] = array('admin'); # Solo el administrador tiene permiso
