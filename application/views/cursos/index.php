@@ -7,6 +7,7 @@
     <th>Materia</th>
     <th>Paralelo</th>
     <th>Año</th>
+    <th>Alumnos</th>
     <th>Activo</th>
     <th></th>
   </tr>
@@ -16,6 +17,7 @@
     <td><?php echo $curso->materia; ?></td>
     <td><?php echo $curso->paralelo; ?></td>
     <td><?php echo $curso->anio; ?></td>
+    <td><?php echo $curso->alumnos; ?></td>
     <td><?php echo activo($curso->activo); ?></td>
     <td>
       <?php echo link_to('Asignar alumnos', 'asignar/curso/'.$curso->id, array('class' => 'curso')) ?><br/>

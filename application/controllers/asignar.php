@@ -19,7 +19,14 @@ class Asignar extends Base
     $this->checkCredentials();
   }
 
-  public function curso($id) {
+  public function curso($id=null) {
+    if(count($_POST) > 0) {
+      $id = $_POST['id'];
+      $this->Curso_model->asignarAlumnos($_POST);
+      $this->session->set_flashdata('notice', "Se asigno correctamente los alumnos");
+      redirect("/cursos");
+    }
+
     $data['curso'] = $this->Curso_model->getId($id);
     $data['paralelo'] = $this->Paralelo_model->getId($data['curso']['paralelo_id']);
     $data['alumnos_list'] = $this->Alumno_model->getList(array(
@@ -32,5 +39,6 @@ class Asignar extends Base
     $data['template'] = 'asignar/curso';
     $this->load->view('layouts/application', $data);
   }
+
 
 }
