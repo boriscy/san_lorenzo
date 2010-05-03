@@ -4,11 +4,11 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title>Colegio</title>
   <link rel="stylesheet" href="<?php echo base_url();?>system/css/style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="<?php echo base_url();?>system/css/ufd-base.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="<?php echo base_url();?>system/css/ufd/plain.css" type="text/css" media="screen" />
   <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/jquery-1.4.2.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/app.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/ui.core.js"></script>
-  <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/jquery.bgiframe.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>system/javascript/jquery.ui.ufd.js"></script>
 </head>
   <body>

@@ -1,4 +1,5 @@
-confirm  font-family: Lucida Grande, Verdana, Sans-serif;
+body{
+  font-family: Lucida Grande, Verdana, Sans-serif;
   font-size: 0.80em;
   padding: 0px;
   margin: 0px;
@@ -101,6 +102,11 @@ form p{
   margin: 0px;
   padding: 0px;
   font-size: 0.95em;
+}
+
+form quote{
+  color: #717171;
+  font-style: italic;
 }
 
 input[type=submit], button{

@@ -4,20 +4,20 @@
 <table class="decorated">
   <tr>
     <th>Profesor</th>
-    <th>Materia</th>
     <th>Paralelo</th>
     <th>Año</th>
     <th>Alumnos</th>
+    <th>Materias</th>
     <th>Activo</th>
     <th></th>
   </tr>
   <?php foreach($cursos->result() as $curso): ?>
   <tr>
     <td><?php echo $curso->nombre_completo; ?></td>
-    <td><?php echo $curso->materia; ?></td>
     <td><?php echo $curso->paralelo; ?></td>
     <td><?php echo $curso->anio; ?></td>
     <td><?php echo $curso->alumnos; ?></td>
+    <td><?php echo $curso->materias; ?></td>
     <td><?php echo activo($curso->activo); ?></td>
     <td>
       <?php echo link_to('Asignar alumnos', 'asignar/curso/'.$curso->id, array('class' => 'curso')) ?><br/>

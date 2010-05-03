@@ -8,8 +8,8 @@ class Curso_model extends Base_model
    */
   function __construct() {
     parent::__construct('cursos');
-    $this->fields = array('usuario_id', 'materia_id', 'paralelo_id',
-      'anio', 'activo', 'alumnos');
+    $this->fields = array('usuario_id', 'paralelo_id',
+      'anio', 'activo', 'alumnos', 'materias');
   }
 
   /**
@@ -17,15 +17,25 @@ class Curso_model extends Base_model
    */
   public function getAll() {
     $sql = "SELECT  c.*, CONCAT(u.primer_nombre,' ', u.segundo_nombre, ' ', u.paterno, ' ', u.materno) AS nombre_completo,
-      m.nombre AS materia, 
       CONCAT(p.nivel, ' ', p.curso, ' ', p.paralelo) AS paralelo FROM cursos c 
       JOIN usuarios u ON (c.usuario_id=u.id)
-      JOIN materias m ON (c.materia_id=m.id)
       JOIN paralelos p ON (c.paralelo_id=p.id)";
     $q = $this->db->query($sql);
     return $q;
   }
 
+  /**
+   * Retorna todas las materias seleccionadas
+   */
+  public function getMaterias($id) {
+    $res = $this->db->query("SELECT * FROM cursos_materias WHERE curso_id=$id");
+    $arr = array();
+    foreach($res->result() as $cm) {
+      array_push($arr, $cm->materia_id);
+    }
+
+    return $arr;
+  }
   /**
    * Funcion que permite obtener todos los alumnos
    */
@@ -60,5 +70,44 @@ class Curso_model extends Base_model
 
     $this->db->trans_complete();
   }
+
+
+  /**
+   * Crea un nuevo curso con todas las materias
+   */
+  public function create($params) {
+    $this->db->trans_start();
+    $curso = $params;
+    $curso['materias'] = isset($params['materias']) ? count($params['materias']): 0;
+    $id = parent::create($curso);
+    if(isset($params['materias'])) {
+      foreach($params['materias'] as $val) {
+        $this->db->insert('cursos_materias', array(
+          'curso_id' => $id, 'materia_id' => $val
+          ) 
+        );
+      }
+    }
+    $this->db->trans_complete();
+  }
+
+  public function update($params) {
+    $this->db->trans_start();
+    $curso = $params;
+    $curso['materias'] = isset($params['materias']) ? count($params['materias']): 0;
+    $id = $params['id'];
+    parent::update($curso);
+    $this->db->query("DELETE FROM cursos_materias WHERE curso_id=$id");
+    if(isset($params['materias'])) {
+      foreach($params['materias'] as $val) {
+        $this->db->insert('cursos_materias', array(
+          'curso_id' => $id, 'materia_id' => $val
+          ) 
+        );
+      }
+    }
+    $this->db->trans_complete();
+  }
+
 }
 

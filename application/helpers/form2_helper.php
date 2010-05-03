@@ -9,19 +9,36 @@
      * @param array Used to repopulate the field in case of an edit
      */
     function input($name, $label, $values=array() ) {
+      if(is_array($name)) {
+        $opts = $name;
+        $name = $opts['name'];
+        $label = $opts['label'];
+        $options = $opts['options'];
+        foreach(array('value', 'hint') as $v) {
+          if(isset($opts[$v]))
+            ${$v} = $opts[$v];
+        }
+        $value = $opts['value'];
+        $hint = $opts['hint'];
+      }
       $html =  '<div class="input">';
-    $html.= "<label>{$label}</label>";
-    $config = array(
-      'name' => $name,
-      'value' => get_form_value($name, $values),
-      'size' => '30'
-    );
-    $html.= form_input($config);
-    $html.= form_error($name);
-    $html.= '</div>';
-    return $html;
+      $html.= "<label>{$label}</label>";
+      $config = array(
+        'name' => $name,
+        'value' => get_form_value($name, $values),
+        'size' => '30'
+      );
+      $html.= form_input($config);
+      $html.= form_error($name);
+      if(isset($hint)) {
+        $html.= "<quote>$hint</quote>";
+      }
+
+      $html.= '</div>';
+      return $html;
   }
 }
+
 
 if(!function_exists('checkbox'))
 {
@@ -32,6 +49,7 @@ if(!function_exists('checkbox'))
    * @param array Used to repopulate the field in case of an edit
    */
   function checkbox($name, $label, $values=array() ) {
+
     $html =  '<div class="input"><input type="hidden" name="'.$name.'" value="0" />';
     $config = array(
       'name' => $name,
@@ -113,13 +131,27 @@ if(!function_exists('select'))
 {
   /**
    * Creates a radio button
-   * @param string
+   * @param string or array
    * @param string
    * @param string
    * @param array
    * @return string
    */
-  function select($name, $label, $value, $options) {
+  function select($name, $label='', $value='', $options = array()) {
+    if(is_array($name)) {
+      $opts = $name;
+      $name = $opts['name'];
+      $options = $opts['options'];
+      $label = $opts['label'];
+
+      foreach(array('hint', 'required') as $v) {
+        if(isset($opts[$v])) {
+          ${$v} = $opts[$v];
+          unset($opts['hint']);
+        }
+      }
+    }
+
     $html = '<div class="input">';
     $html.= "<label>$label</label>";
     $html.= "<select name=\"$name\">";
@@ -133,11 +165,12 @@ if(!function_exists('select'))
     }
     $html.= '</select>';
     $html.= form_error($name);
+    if(isset($hint))
+      $html.= "<br /><quote>$hint</quote>";
     $html.= '</div>';
     return $html;
   }
 }
-
 
 
 if(!function_exists('get_form_value'))
@@ -245,4 +278,125 @@ if(!function_exists('is_ajax'))
       return false;
     }
   }
+}
+
+function input2($params){
+  $input = new Form2Helper();
+  return $input->input($params);
+}
+
+function select2($params) {
+  $select = new Form2Helper();
+  return $select->select($params);
+}
+/**
+ * Creates all necessary form helpers in a simple way
+ */
+class Form2Helper
+{
+  public $wrapper, $control;
+  private $obligatory;
+  public $afterControl = array(); // Parameters that are set after the control
+  public $listOptions = array(); // The list of options for select or radio controls
+
+  public function __construct() {
+    $this->wrapper = '<div class="input">${cont}</div>';
+  }
+
+  /**
+   * Wraps the content
+   */
+  public function wrapper($cont) {
+    return str_replace('${cont}', $cont, $this->wrapper);
+  }
+
+
+  /**
+   * Set parameters
+   */
+  private function setParameters($params) {
+    $html = array();
+//    print_r($params);
+    foreach($this->obligatory as $k) {
+      if(!isset($params[$k]) ) {
+        die("You must set the obligatory param '$v'");
+      }
+      array_push($html, "$k='{$params[$k]}'");
+      unset($params[$k]);
+    }
+
+    if(isset($params['hint'])) {
+      $this->afterControl['hint'] = $params['hint'];
+      unset($params['hint']);
+    }
+
+    if(isset($params['required'])) {
+      $this->afterControl['required'] = $params['required'];
+      unset($params['required']);
+    }
+
+    if(isset($params['options'])) {
+      $this->listOptions = $params['options'];
+      unset($params['options']);
+    }
+
+    foreach($params as $k => $v) {
+      array_push($html, "$k='{$v}'");
+    }
+
+    return join($html, ' ');
+  }
+
+  /**
+   * Create an input text
+   */
+  public function input($params) {
+    $this->obligatory = array('name');
+    $html = '<input type="text"' . $this->setParameters($params) . ' />';
+    $html.= $this->setAfterControl();
+
+    return $this->wrapper($html);
+  }
+
+  /**
+   * Select
+   */
+  public function select($params) {
+    $this->obligatory = array('name');
+    $html = '<select ' . $this->setParameters($params) . ' />';
+    $value = '';
+    if(isset($params['value'])) 
+      $value = $params['value'];
+    $html.= $this->options($params['options'], $value);
+    $html.= '</select>';
+    $html.= $this->setAfterControl();
+
+    return $this->wrapper($html);
+  }
+  /**
+   * Sets all content after control
+   */
+  private function setAfterControl() {
+    $html = '';
+    if(isset($this->afterControl['required']) )
+      $html.= "<abbr title='requerido'>*</abbr>";
+    if(isset($this->afterControl['hint']) )
+      $html.= "<quote>{$this->afterControl['hint']}</quote>";
+
+    return $html;
+  }
+
+
+  public function options($options, $value='') {
+    $html = array('<option></option>');
+    foreach($options as $k => $v) {
+      if($k == $value) {
+        array_push($html, "<option value='{$k}' selected='selected'>{$v}</option>");
+      }else{
+        array_push($html, "<option value='{$k}' >{$v}</option>");
+      }
+    }
+    return join($html, ' ');
+  }
+
 }

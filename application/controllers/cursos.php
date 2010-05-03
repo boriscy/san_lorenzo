@@ -8,7 +8,7 @@ class Cursos extends Base
    * Constructor
    */
   public function __construct() {
-    parent::Controller();
+    parent::__construct();
     $this->load->model('Curso_model');
     $this->load->model('Usuario_model');
     $this->load->model('Paralelo_model');
@@ -73,6 +73,11 @@ class Cursos extends Base
     $data['materias'] = $this->Materia_model->getList(array('labelField'=>'nombre', 'order' => 'nombre ASC'));
     $data['paralelos'] = $this->Paralelo_model->getList(array('labelField'=>'nivel, curso, paralelo', 'order' => 'nivel, curso, paralelo ASC'));
     $data['vals'] = $this->Curso_model->getId($id);
+    if(isset($_POST['materias'])) {
+      $data['vals']['materias'] = $_POST['materias'];
+    }else{
+      $data['vals']['materias'] = $this->Curso_model->getMaterias($id);
+    }
 
     $data['template'] = 'cursos/edit';
     $this->load->view('layouts/application', $data);
@@ -90,11 +95,8 @@ class Cursos extends Base
       redirect('/cursos');
     }else{
       $this->session->set_flashdata('error', 'Existen errores en su formulario');
+      $this->edit($_POST['id']);
     }
-
-    $data['vals'] = array();
-    $data['template'] = 'cursos/edit';
-    $this->load->view('layouts/application', $data);
   }
 
 
@@ -113,8 +115,6 @@ class Cursos extends Base
 
   protected function formValidations() {
 		$this->form_validation->set_rules('anio', 'año', 'required|numeric|trim');
-		$this->form_validation->set_rules('materia_id', 'materia', 'required');
-		$this->form_validation->set_rules('usuario_id', 'profesor', 'required');
 		$this->form_validation->set_rules('paralelo_id', 'paralelo', 'required');
   }
 }
