@@ -33,6 +33,9 @@ class Base extends Controller
       redirect("/login");
     }else{
       list($controller, $action) = $this->getUri();
+      if(!isset($this->credentials[$action])) {
+        die("Error: you did not set credentals in your controller for \"$action\"");
+      }
       if( !in_array($this->session->userdata('usuario_tipo'), $this->credentials[$action] ) ) {
         $this->session->set_flashdata('warning', 'Usted no tiene permiso para acceder esta área');
         redirect("/login/access");

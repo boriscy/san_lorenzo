@@ -1,6 +1,23 @@
 <h1>Alumnos</h1>
 
+<a href="javascript:" id="a_importar">Importar archivo excel</a>
+<div id="importar" style="display:none">
+  <?php echo form_open_multipart('alumnos/import') ?>
+    <label>Archivo de excel de alumnos</label>
+    <?php echo form_upload(array('name' => 'alumnos_excel', 'size' => 50) ) ?>
+    <div style="clear:both"></div>
+    <?php echo form_submit('submit', 'Importar') ?>
+  </form>
+</div>
+<br /><br />
+<div style="clear:both"></div>
+
 <?php echo link_to("Nuevo alumno", '/alumnos/create', array('class' => 'new') ) ?>
+
+<div class="pagination">
+<?php echo $this->pagination->create_links() ?>
+</div>
+
 <table class="decorated">
   <tr>
     <th>Nombre completo</th>
@@ -27,3 +44,16 @@
   </tr>
   <?php endforeach; ?>
 </table>
+
+<div class="pagination">
+<?php echo $this->pagination->create_links() ?>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#a_importar').click(function() {
+    $(this).hide(200);
+    $('#importar').show(300);
+  });
+});
+</script>

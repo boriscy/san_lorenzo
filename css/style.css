@@ -188,3 +188,15 @@ ul.half li{
   width: 49%;
   float: left;
 }
+.pagination{
+  padding: 8px 10px;
+}
+.pagination a{
+  color: #28256A;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.pagination a:hover{
+  text-decoration: underline;
+}

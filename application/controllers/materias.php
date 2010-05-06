@@ -25,7 +25,7 @@ class Materias extends Base {
    * index
    */
   public function index() {
-    $data['materias'] = $this->Materia_model->getAll();
+    $data['materias'] = $this->Materia_model->getAll(array('order' => 'nombre ASC'));
 
     $data['template'] = 'materias/index';
     $this->load->view('layouts/application', $data);
@@ -91,13 +91,20 @@ class Materias extends Base {
 
 
   protected function formValidations() {
-		$this->form_validation->set_rules('nombre', 'nombre', 'required|trim');
-		$this->form_validation->set_rules('codigo', 'código', 'required|callback_unique_codigo|trim');
+		$this->form_validation->set_rules('nombre', 'nombre', 'required|callback_unique_nombre|trim');
+		$this->form_validation->set_rules('codigo', 'código', 'trim');
+  }
+
+  function unique_nombre($str) {
+    $this->form_validation->set_message('unique_nombre', 'El nombre de la materia debe ser único');
+    return $this->Materia_model->uniquenessOfField('nombre', trim($str) );
   }
 
   function unique_codigo($str) {
     $this->form_validation->set_message('unique_codigo', 'El código de la materia debe ser único');
     return $this->Materia_model->uniquenessOfField('codigo', $str);
   }
+
+
 
 }

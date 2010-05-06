@@ -16,7 +16,8 @@ class Alumnos extends Base
       'edit' => array('admin', 'adm'),
       'create' => array('admin', 'adm'),
       'update' => array('admin', 'adm'),
-      'destroy' => array('admin', 'amd')
+      'destroy' => array('admin', 'amd'),
+      'import' => array('admin', 'amd')
     );
 
     $this->checkCredentials();
@@ -25,9 +26,15 @@ class Alumnos extends Base
   /**
    * index
    */
-  public function index() {
-    $data['alumnos'] = $this->Alumno_model->getAll();
+  public function index($offset = 0) {
+    $this->load->library('pagination');
 
+    $config['base_url'] = site_url(). '/alumnos/index';
+    $config['total_rows'] = $this->Alumno_model->countRows();
+
+    $this->pagination->initialize($config);
+
+    $data['alumnos'] = $this->Alumno_model->getAll(array('offset' => $offset, 'limit' => 30, 'order' => 'primer_nombre, segundo_nombre, paterno, materno'));
     $data['template'] = 'alumnos/index';
     $this->load->view('layouts/application', $data);
   }
@@ -89,6 +96,26 @@ class Alumnos extends Base
       $this->session->set_flashdata('error', 'No fue posible borrar correctamente el alumno');
     }
     redirect('alumnos');
+  }
+
+  /**
+   * importar
+   */
+  public function import() {
+    $config = array(
+      'upload_path' => './system/excel/alumnos',
+      'allowed_types' => 'xls'
+      );
+
+    $this->load->library('upload', $config);
+
+    if(!$this->upload->do_upload('alumnos_excel') ) {
+      echo $this->upload->display_errors();
+    }else{
+      $params = $this->upload->data();
+      $file_name = $params['file_name'];
+      $errors = $this->Alumno_model->import($file_name);
+    }
   }
 
   protected function formValidations() {

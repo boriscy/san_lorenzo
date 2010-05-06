@@ -25,14 +25,15 @@ javascript: (function() {
 	}
 	
 	/* get script: */
-	for(scriptPtr in scripts){
+	/*for(scriptPtr in scripts){
 		var script = document.createElement('SCRIPT');
 		script.type = 'text/javascript';
 		script.src = scripts[scriptPtr] + "?noCache=" + (Math.random());
 		head.appendChild(script);
-	}
+	}*/
 	
 	/* get css: */
+  /*
 	for(cssPtr in csses){
 		var css = document.createElement('LINK');
 		css.rel = 'stylesheet';
@@ -42,7 +43,8 @@ javascript: (function() {
 		
 		head.appendChild(css);
 	}	
-	
+	*/
+
 	/* thanks for inspiration: http://www.learningjquery.com/2009/04/better-stronger-safer-jquerify-bookmarklet */
 	var tryjQuery=function() {
 		if (typeof jQuery=='undefined' || typeof jQuery.ui=='undefined'|| typeof jQuery.ui.ufd=='undefined') {

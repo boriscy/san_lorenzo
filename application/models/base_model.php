@@ -13,6 +13,18 @@ class Base_model extends Model
   }
 
   /**
+   * Carga un modelo
+   * @param string
+   * @return Model
+   */
+  function loadModel($model) {
+    $mod = strtolower($model);
+    $file = dirname(__FILE__) .'/'. "{$mod}.php";
+    require_once($file);
+    return new $model();
+  }
+
+  /**
    * Intersecta los valores de $this->fields con los de los parametros cuando se realiza un create update
    */
   function intersectFields($params) {
@@ -29,9 +41,40 @@ class Base_model extends Model
   /**
    * Retorna toddos los items
    */
-  function getAll() {
-    $q = $this->db->get($this->table);
+  function getAll($options = array()) {
+    $options = $this->setOptions($options);
+    $sql = "SELECT * FROM {$this->table} {$options['conditions']} {$options['order']} {$options['limit']}";
+    $q = $this->db->query($sql);
     return $q;
+  }
+
+  /**
+   *
+   */
+  function setOptions($options) {
+    // ORDER
+    if(isset($options['order']) ) {
+      $options['order'] = 'ORDER BY ' . $options['order'];
+    }else {
+      $options['order'] = '';
+    }
+    // WHERE
+    if(isset($options['conditions']) ) {
+      $options['conditions'] = 'WHERE ' . $options['conditions'];
+    }else {
+      $options['conditions'] = '';
+    }
+    // LIMIT
+    if(isset($options['limit'])) {
+      $offset = 0;
+      if(isset($options['offset']))
+        $offset = $options['offset'];
+      $options['limit'] = "LIMIT $offset, {$options['limit']}";
+    }else {
+      $options['limit'] = '';
+    }
+
+    return $options;
   }
 
   /**
@@ -156,6 +199,17 @@ class Base_model extends Model
     }else{
       return false;
     }
+  }
+
+  /**
+   * Cuenta el numero de filas
+   */
+  function countRows($options = array()) {
+    unset($options['limit']);
+    unset($options['offset']);
+    $options = $this->setOptions($options);
+    $q = $this->db->query("SELECT COUNT(*) AS total FROM {$this->table} {$options['conditions']}");
+    return $q->row()->total;
   }
 
 }

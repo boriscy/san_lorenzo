@@ -430,7 +430,7 @@ class Spreadsheet_Excel_Reader {
 		$color=$this->color($row,$col,$sheet);
 		if ($color!="") {
 			$css .= "color:$color;";
-		}/*
+		}
 		$bold=$this->bold($row,$col,$sheet);
 		if ($bold) {
 			$css .= "font-weight:bold;";
@@ -442,7 +442,7 @@ class Spreadsheet_Excel_Reader {
 		$underline=$this->underline($row,$col,$sheet);
 		if ($underline) {
 			$css .= "text-decoration:underline;";
-		}*/
+		}
 		// Borders
 		$bLeft = $this->borderLeft($row,$col,$sheet);
 		$bRight = $this->borderRight($row,$col,$sheet);
@@ -470,22 +470,7 @@ class Spreadsheet_Excel_Reader {
 		
 		return $css;
 	}
-	function classes($row,$col,$sheet=0,$properties='') {
-		$classes = "";
-		$bold=$this->bold($row,$col,$sheet);
-		if ($bold) {
-			$classes .= "bold ";
-		}
-		$italic=$this->italic($row,$col,$sheet);
-		if ($italic) {
-			$classes .= "italic ";
-		}
-		$underline=$this->underline($row,$col,$sheet);
-		if ($underline) {
-			$classes .= "underline ";
-		}
-		return $classes;
-	}
+	
 	// FORMAT PROPERTIES
 	// =================
 	function format($row,$col,$sheet=0) {
@@ -604,14 +589,14 @@ class Spreadsheet_Excel_Reader {
 		if ($col_letters) {
 			$out .= "<thead>\n\t<tr>";
 			if ($row_numbers) {
-				$out .= "\n\t\t<th style='width:50px'><div>&nbsp;</div></th>";
+				$out .= "\n\t\t<th>&nbsp</th>";
 			}
 			for($i=1;$i<=$this->colcount($sheet);$i++) {
 				$style = "width:" . ($this->colwidth($i,$sheet)*1) . "px;";
 				if ($this->colhidden($i,$sheet)) {
 					$style .= "display:none;";
 				}
-				$out .= "\n\t\t<th style=\"$style\"><div>" . strtoupper($this->colindexes[$i]) . "</div></th>";
+				$out .= "\n\t\t<th style=\"$style\">" . strtoupper($this->colindexes[$i]) . "</th>";
 			}
 			$out .= "</tr></thead>\n";
 		}
@@ -640,16 +625,10 @@ class Spreadsheet_Excel_Reader {
 				}
 				if(!$this->sheets[$sheet]['cellsInfo'][$row][$col]['dontprint']) {
 					$style = $this->style($row,$col,$sheet);
-					
-					$classes = $this->classes($row,$col,$sheet);
-					
 					if ($this->colhidden($col,$sheet)) {
 						$style .= "display:none;";
 					}
-					//$out .= "\n\t\t<td style=\"$style\"" . ($colspan > 1?" colspan=$colspan":"") . ($rowspan > 1?" rowspan=$rowspan":"") . ">";
-					//para que genere el id
-					$out .= "\n\t\t<td id='".$sheet."_".$row."_".$col."' class='$classes' style=\"$style\"" . ($colspan > 1?" colspan=$colspan":"") . ($rowspan > 1?" rowspan=$rowspan":"") . ">";
-					
+					$out .= "\n\t\t<td style=\"$style\"" . ($colspan > 1?" colspan=$colspan":"") . ($rowspan > 1?" rowspan=$rowspan":"") . ">";
 					$val = $this->val($row,$col,$sheet);
 					if ($val=='') { $val="&nbsp;"; }
 					else { 
@@ -659,9 +638,7 @@ class Spreadsheet_Excel_Reader {
 							$val = "<a href=\"$link\">$val</a>";
 						}
 					}
-					//$out .= "<nobr>".nl2br($val)."</nobr>";
-					//$out .= '<div style="overflow:hidden">'. nl2br($val) .'</div>';
-					$out .= nl2br($val);
+					$out .= "<nobr>".nl2br($val)."</nobr>";
 					$out .= "</td>";
 				}
 			}
@@ -1217,7 +1194,7 @@ class Spreadsheet_Excel_Reader {
 						$alignbit = ord($data[$pos+10]) & 3;
 						$bgi = (ord($data[$pos+22]) | ord($data[$pos+23]) << 8) & 0x3FFF;
 						$bgcolor = ($bgi & 0x7F);
-						//$bgcolor = ($bgi & 0x3f80) >> 7;
+//						$bgcolor = ($bgi & 0x3f80) >> 7;
 						$align = "";
 						if ($alignbit==3) { $align="right"; }
 						if ($alignbit==2) { $align="center"; }
@@ -1264,11 +1241,6 @@ class Spreadsheet_Excel_Reader {
 								if ($formatstr!="") {
 									$tmp = preg_replace("/\;.*/","",$formatstr);
 									$tmp = preg_replace("/^\[[^\]]*\]/","",$tmp);
-									//$tmp = preg_replace("/\"de\"/","",$tmp);
-									if (strpos($tmp,"mmmm")){
-									    $tmp = "dd/mm/yyyy";
-									}
-									//echo "$tmp<br/>";
 									if (preg_match("/[^hmsday\/\-:\s\\\,AMP]/i", $tmp) == 0) { // found day and time format
 										$isdate = TRUE;
 										$formatstr = $tmp;
@@ -1655,22 +1627,11 @@ class Spreadsheet_Excel_Reader {
 				$totalseconds -= $secs;
 				$hours = floor($totalseconds / (60 * 60));
 				$mins = floor($totalseconds / 60) % 60;
-                $string = date ($format, mktime($hours, $mins, $secs, $dateinfo["mon"], $dateinfo["mday"], $dateinfo["year"]));
+				$string = date ($format, mktime($hours, $mins, $secs, $dateinfo["mon"], $dateinfo["mday"], $dateinfo["year"]));
 			} else if ($type == 'number') {
 				$rectype = 'number';
-				//verifica si el formato es legible (con encoding)
-				if (checkEncoding($format, 'UTF-8')){
-				    //quita * y ?
-				    $format = str_replace("*","",$format);
-				    $format = str_replace("?","",$format);
-                    $formatted = $this->_format_value($format, $numValue, $formatIndex);
-                    $string = $formatted['string'];
-                }else{
-                    //si no lo fuera, devuelve el valor numerico por defecto
-                    $formatted = $this->_format_value("#,##0.00", $numValue, $formatIndex);
-                    $string = $formatted['string'];
-                    //$string = $numValue;
-                }
+				$formatted = $this->_format_value($format, $numValue, $formatIndex);
+				$string = $formatted['string'];
 				$formatColor = $formatted['formatColor'];
 				$raw = $numValue;
 			} else{
@@ -1683,7 +1644,6 @@ class Spreadsheet_Excel_Reader {
 				$formatColor = $formatted['formatColor'];
 				$raw = $numValue;
 			}
-				//echo "$numValue - $format - $type<br>";
 
 			return array(
 				'string'=>$string,
@@ -1772,12 +1732,6 @@ class Spreadsheet_Excel_Reader {
 		return $value;
 	}
 
-}
-
-function checkEncoding ( $string, $string_encoding ) {
-    $fs = $string_encoding == 'UTF-8' ? 'UTF-32' : $string_encoding;
-    $ts = $string_encoding == 'UTF-32' ? 'UTF-8' : $string_encoding;
-    return $string === mb_convert_encoding ( mb_convert_encoding ( $string, $fs, $ts ), $ts, $fs );
 }
 
 ?>
