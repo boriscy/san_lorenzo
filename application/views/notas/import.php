@@ -18,7 +18,8 @@ for($i = 2000; $i < 2100; $i++)
       <?php endforeach; ?>
     </ul>
 </div>
-
+<?php elseif(isset($errors)): ?>
+  <h3 style="color:#005800">Se importo correctamente las notas</h3>
 <?php endif; ?>
 
 <?php echo form_open_multipart('notas/create_import') ?>
