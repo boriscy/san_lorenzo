@@ -141,7 +141,7 @@ class Base_model extends Model
   /**
    * Finds one record with just a and value
    */
-  function findByField($field,$value, $limit=1, $offset=0) {
+  function findByField($field, $value, $limit=1, $offset=0) {
     $q = $this->db->get_where($this->table, array($field => $value), $limit, $offset);
     if($limit == 1) {
       return $q->row();

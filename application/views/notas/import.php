@@ -1,25 +1,12 @@
-<h1>Notas</h1>
-
 <?php 
 $anios = array();
 for($i = 2000; $i < 2100; $i++)
   $anios[$i] = $i;
 ?>
 
-<a href="javascript:" id="a_buscar">buscar por alumno y año</a>
-
-<div id="buscar" style="border: 1px solid #D0D2CF; padding: 0px 20px;">
-<?php echo form_open("notas/alumno") ?>
-  <div class="input">
-    <label>Alumno</label>
-  </div>
-    
-  <?php echo select('anio', 'Año', date('Y'), $anios); ?>
-</form>
-</div>
 
 
-<h2>Importar notas</h2>
+<h1>Importar notas</h1>
 
 <?php echo form_open_multipart('notas/importar') ?>
 

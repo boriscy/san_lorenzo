@@ -144,4 +144,6 @@ echo $alumno_id.':'.$materia_id,'<br/>';
     }
   }
 
+
+ 
 }

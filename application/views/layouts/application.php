@@ -24,3 +24,4 @@
 <?php $this->load->view($template); ?>
 
 <?php $this->load->view("layouts/footer") ?>
+<div id="mask"></div>

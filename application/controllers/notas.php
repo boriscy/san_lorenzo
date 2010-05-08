@@ -9,11 +9,13 @@ class Notas extends Base
     parent::Controller();
     $this->load->model('Paralelo_model');
     $this->load->model('Nota_model');
+    $this->load->model('Alumno_model');
     // Credenciales para el controlador
     $this->credentials = array(
       'index' => array('admin'),
+      'new_import' => array('admin'),
+      'create_import' => array('admin'),
       'edit' => array('admin'),
-      'create' => array('admin'),
       'update' => array('admin'),
       'destroy' => array('admin')
     );
@@ -22,14 +24,19 @@ class Notas extends Base
   function index() {
     $data['cursos'] = $this->Paralelo_model->getList(array('labelField' => 'nivel, curso, paralelo'));
     $this->load->model('Alumno_model');
-    $data['alumnos'] = $this->Alumno_model->getList(array('labelField' => 'paterno', 'conditions' => 'activo=0') );
+    $data['alumnos'] = $this->Alumno_model->getList(array('labelField' => 'primer_nombre, segundo_nombre, paterno, materno') );
 
-    $data['template'] = 'notas/import';
+    $data['template'] = 'notas/index';
     $this->load->view('layouts/application', $data);
 
   }
 
-  function importar() {
+  function new_import() {
+    $data['template'] = 'notas/import';
+    $this->load->view('layouts/application', $data);
+  }
+
+  function create_import() {
     $config = array(
       'upload_path' => './system/excel/notas',
       'allowed_types' => 'xls'
@@ -52,6 +59,43 @@ class Notas extends Base
   /**
    * Presenta la notas por alumno
    */
-  function alumno() {
+  public function edit() {
+    if(trim($_GET['codigo']) != '' ) {
+      $field = 'codigo';
+      $val = intval($_GET['codigo']);
+    }else{
+      $field = 'id';
+      $val = intval($_GET['alumno_id']);
+    }
+    $alumno = $this->Alumno_model->findByField($field, $val);
+    if(is_array($alumno)) {
+      $this->session->set_flashdata('error', "El alumno que busca no existe");
+      redirect("/notas");
+    }
+
+    $data['alumno'] = $alumno;
+    $materia = $this->Nota_model->loadModel('Materia_model');
+    $data['materias'] = $materia->getList(array('labelField' => 'nombre'));
+
+    $anio = intval($_GET['anio']);
+    $conditions = array('conditions' => "alumno_id={$alumno->id} AND anio={$anio}" );
+    $data['notas'] = $this->Nota_model->getAll($conditions);
+
+    $data['template'] = 'notas/edit';
+    $this->load->view('layouts/application', $data);
+  }
+
+  /**
+   * Actualizacion de notas
+   */
+  public function update() {
+    $notas = array('id' => $_POST['nota_id']);
+    $arr = array();
+    foreach($this->Nota_model->columnas as $pos => $col) {
+      $arr[$col] = $_POST[$col];
+    }
+    $notas['notas_profesor'] = json_encode($arr);
+    $this->Nota_model->update($notas);
+    echo $notas['notas_profesor'];
   }
 }

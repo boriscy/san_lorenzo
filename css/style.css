@@ -161,15 +161,28 @@ a.new{
   font-size: 1.2em;
 }
 
+a.new:hover{
+  text-decoration: underline;
+}
+
+a.import{
+  font-weight: bold;
+  background: transparent url(images/page_excel.png) no-repeat;
+  padding-left: 20px;
+  color: #28256A;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+a.import:hover{
+  text-decoration: underline;
+}
+
 a.curso{
   background: transparent url(images/group_add.png) no-repeat;
   padding-left: 20px;
   font-weight: bold;
 }
 
-a.new:hover{
-  text-decoration: underline;
-}
 
 .marked{
   background-color: #F28151;
@@ -199,4 +212,41 @@ ul.half li{
 }
 .pagination a:hover{
   text-decoration: underline;
+}
+
+.even{
+  background-color: #F8F8F8;
+}
+
+/* Z-index of #mask must lower than #boxes .window */
+#mask {
+  position: fixed;
+  z-index:9000;
+  background-color:#000;
+  display: none;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+}
+
+.dialog{
+  background: #FFF;
+  z-index: 10000;
+  display: none;
+  position: absolute;
+  border: 4px solid #1F1F1F;
+}
+
+.dialog span.close{
+  width: 26px;
+  height: 26px;
+  display: block;
+  background: transparent url(images/x.png);
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  display: block;
 }
