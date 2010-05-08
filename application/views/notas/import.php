@@ -8,7 +8,20 @@ for($i = 2000; $i < 2100; $i++)
 
 <h1>Importar notas</h1>
 
-<?php echo form_open_multipart('notas/importar') ?>
+<?php if(isset($errors) && count($errors) > 0): ?>
+
+<div class="error">
+  <h3 class="error">Existieron errores en la importación</h3>
+    <ul>
+      <?php foreach($errors as $v): ?>
+      <li><?php echo $v ?></li>
+      <?php endforeach; ?>
+    </ul>
+</div>
+
+<?php endif; ?>
+
+<?php echo form_open_multipart('notas/create_import') ?>
 
 <?php // echo select('paralelo_id', 'Curso', '', $cursos) ?>
 

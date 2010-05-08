@@ -88,7 +88,6 @@ class Nota_model extends Base_model
    * @param integer
    */
   private function setNota($alumno_id, $materia_id, &$excel, $anio, $i) {
-echo $alumno_id.':'.$materia_id,'<br/>';
     $notas = array();
     foreach($this->columnas as $pos => $columna) {
       $nota = intval($excel->val($i, $pos) );

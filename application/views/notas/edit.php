@@ -31,7 +31,7 @@
 </style>
 
 <h1>Notas</h1>
-<h2><?php echo Alumno_model::nombreCompleto($alumno) ?></h2>
+<h2><?php echo Alumno_model::nombreCompleto($alumno) ?> - <?php echo $anio ?></h2>
 
 <table class="decorated">
 <tr>
@@ -59,7 +59,7 @@
 
 <div id="editor" class="dialog">
   <span class="close"></span>
-  <h2><?php echo Alumno_model::nombreCompleto($alumno) ?> (<span class="materia"></span>)</h2>
+  <h2><?php echo Alumno_model::nombreCompleto($alumno) ?> - <?php echo $anio ?> (<span class="materia"></span>)</h2>
   <table class="decorated">
   <tr>
   <?php foreach($this->Nota_model->columnas as $pos => $val): ?>
@@ -78,7 +78,7 @@
   </table>
   <br />
   <div>
-  <button>Salvar</button>
+  <button style="float: left">Salvar</button><span class="loader" style="float:left; margin-left: 4px;display:none;"></span>
   </div>
 </div>
 
@@ -124,6 +124,8 @@ $(document).ready(function() {
     $(this).attr("disabled", true);
     $('#editor input').attr("disabled", true);
 
+    $('#editor .loader').show();
+
     var data = {};
     $('#editor input').each(function(i, el) {
       data[$( el ).attr( "name" )] = $( el ).val();
@@ -142,8 +144,12 @@ $(document).ready(function() {
           }
         });
         $('.dialog .close').trigger("click");
+        $('#editor .loader').hide();
         // Marcar
         mark(tr, 35);
+      },
+      'failure': function() {
+          $('#editor .loader').hide();
       }
     });
   });

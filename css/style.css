@@ -201,6 +201,11 @@ ul.half li{
   width: 49%;
   float: left;
 }
+
+.error{
+  color: #CB0000;
+}
+
 .pagination{
   padding: 8px 10px;
 }
@@ -249,4 +254,11 @@ ul.half li{
   top: 0px;
   right: 0;
   display: block;
+}
+
+.loader{
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-image: url(images/ajax-loader.gif);
 }

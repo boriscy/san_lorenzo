@@ -49,7 +49,7 @@ class Notas extends Base
     }else{
       $params = $this->upload->data();
       $file_name = $params['file_name'];
-      $errors = $this->Nota_model->insertUpdateNotas($file_name, $_POST['anio']);
+      $data['errors'] = $this->Nota_model->insertUpdateNotas($file_name, $_POST['anio']);
     }
 
     $data['template'] = 'notas/import';
@@ -78,6 +78,7 @@ class Notas extends Base
     $data['materias'] = $materia->getList(array('labelField' => 'nombre'));
 
     $anio = intval($_GET['anio']);
+    $data['anio'] = $anio;
     $conditions = array('conditions' => "alumno_id={$alumno->id} AND anio={$anio}" );
     $data['notas'] = $this->Nota_model->getAll($conditions);
 
