@@ -59,14 +59,20 @@ class Notas extends Base
   /**
    * Presenta la notas por alumno
    */
-  public function edit() {
-    if(trim($_GET['codigo']) != '' ) {
+  public function edit($codigo, $alumno_id, $anio) {
+    $codigo = trim(str_replace('codigo:', '', $codigo));
+    $alumno_id = trim( str_replace('alumno_id:', '', $alumno_id) );
+    $anio = trim( str_replace('anio:', '', $anio) );
+
+
+    if($codigo != '' ) {
       $field = 'codigo';
-      $val = intval($_GET['codigo']);
+      $val = intval($codigo);
     }else{
       $field = 'id';
-      $val = intval($_GET['alumno_id']);
+      $val = intval($alumno_id);
     }
+
     $alumno = $this->Alumno_model->findByField($field, $val);
     if(is_array($alumno)) {
       $this->session->set_flashdata('error', "El alumno que busca no existe");
@@ -77,7 +83,7 @@ class Notas extends Base
     $materia = $this->Nota_model->loadModel('Materia_model');
     $data['materias'] = $materia->getList(array('labelField' => 'nombre'));
 
-    $anio = intval($_GET['anio']);
+    $anio = intval($anio);
     $data['anio'] = $anio;
     $conditions = array('conditions' => "alumno_id={$alumno->id} AND anio={$anio}" );
     $data['notas'] = $this->Nota_model->getAll($conditions);

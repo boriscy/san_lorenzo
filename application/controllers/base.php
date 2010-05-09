@@ -33,6 +33,7 @@ class Base extends Controller
       redirect("/login");
     }else{
       list($controller, $action) = $this->getUri();
+
       if(!isset($this->credentials[$action])) {
         die("Error: you did not set credentals in your controller for \"$action\"");
       }

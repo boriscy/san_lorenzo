@@ -19,3 +19,14 @@ for($i = 2000; $i < 2100; $i++)
 </form>
 </div>
 
+<script>
+$(document).ready(function() {
+  $('form').submit(function(e) {
+    var codigo = $('input[name=codigo]').val(), alumno_id = $('select[name=alumno_id]').val(), anio = $('select[name=anio]').val();
+    var url = "<?php echo site_url() ?>" + '/notas/edit/codigo:' + codigo + '/alumno_id:' + alumno_id + '/anio:' + anio;
+    e.stopPropagation();
+    window.location = url;
+    return false;
+  });
+});
+</script>

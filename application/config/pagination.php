@@ -1,4 +1,5 @@
 <?php
+$config['page_query_string'] = FALSE;
 $config['per_page'] = '30';
 $config['first_link']= "primera";
 $config['last_link']= "última";

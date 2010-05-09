@@ -26,7 +26,7 @@ class Alumnos extends Base
   /**
    * index
    */
-  public function index($offset = 0) {
+  public function index($offset=0) {
     $this->load->library('pagination');
 
     $config['base_url'] = site_url(). '/alumnos/index';
