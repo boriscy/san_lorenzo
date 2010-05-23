@@ -18,6 +18,9 @@ class Nota_model extends Base_model
       18 => 'pa', 19 => 'rf', 20 => 'pf', 21 => 'pg'
     );
 
+  // Columna del pago
+  public $col_pago = 'pg';
+
   // Utilizado como fecha para poder revisar las modificaciones
   public $creado_en;
   /**

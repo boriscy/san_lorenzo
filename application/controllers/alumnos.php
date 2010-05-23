@@ -35,6 +35,7 @@ class Alumnos extends Base
     $this->pagination->initialize($config);
 
     $data['alumnos'] = $this->Alumno_model->getAll(array('offset' => $offset, 'limit' => 30, 'order' => 'primer_nombre, segundo_nombre, paterno, materno'));
+    $data['alumnos_list'] = $this->Alumno_model->getList( array( 'labelField' => 'primer_nombre, segundo_nombre, paterno, materno') );
     $data['template'] = 'alumnos/index';
     $this->load->view('layouts/application', $data);
   }
@@ -115,6 +116,9 @@ class Alumnos extends Base
       $params = $this->upload->data();
       $file_name = $params['file_name'];
       $errors = $this->Alumno_model->import($file_name);
+      $data['template'] = 'alumnos/import';
+      $data['errors'] = $errors;
+      $this->load->view('layouts/application', $data);
     }
   }
 

@@ -8,7 +8,18 @@
     <div style="clear:both"></div>
     <?php echo form_submit('submit', 'Importar') ?>
   </form>
+
+
 </div>
+
+
+<div id="buscar" style="border: 1px solid #D0D2CF; padding: 0px 20px;">
+  <form action="" id="form_buscar">
+  <?php echo select('alumno_id', 'Buscar por nombre', '', $alumnos_list) ?>
+  <input type="submit" value="Buscar" />
+  </form>
+</div>
+
 <br /><br />
 <div style="clear:both"></div>
 
@@ -54,6 +65,16 @@ $(document).ready(function() {
   $('#a_importar').click(function() {
     $(this).hide(200);
     $('#importar').show(300);
+  });
+
+  $('#form_buscar').submit(function(e) {
+    var alumno_id = $('select[name=alumno_id]').val();
+    if(alumno_id) {
+      var url = "<?php echo site_url() ?>" + '/alumnos/edit/' + alumno_id;
+      e.stopPropagation();
+      window.location = url;
+    }
+    return false;
   });
 });
 </script>

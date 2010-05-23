@@ -13,6 +13,21 @@ class Base_model extends Model
   }
 
   /**
+   * Crea el nombre completo concatenando los campos
+   * 'primer_nombre', 'segundo_nombre', 'paterno', 'materno'
+   */
+  static function nombreCompleto($res) {
+    $names = array('primer_nombre', 'segundo_nombre', 'paterno', 'materno');
+    $concat = array();
+    foreach($names as $v) {
+      if(trim($res->{$v}) != '')
+        array_push($concat , $res->{$v});
+    }
+    return join(' ', $concat);
+  }
+
+
+  /**
    * Carga un modelo
    * @param string
    * @return Model

@@ -63,6 +63,9 @@
   <table class="decorated">
   <tr>
   <?php foreach($this->Nota_model->columnas as $pos => $val): ?>
+    <?php if($val == $this->Nota_model->col_pago && $this->session->userdata('usuario_tipo') == 'profe')
+    continue;
+    ?>
     <th><?php echo $val ?></th>
   <?php endforeach; ?>
   </tr>
@@ -71,6 +74,9 @@
   <input type="hidden" name="alumno_id" id="alumno_id" value="" />
   <tr>
   <?php foreach($this->Nota_model->columnas as $pos => $val): ?>
+    <?php if($val == $this->Nota_model->col_pago && $this->session->userdata('usuario_tipo') == 'profe')
+      continue;
+     ?>
     <td><input type="text" name="<?php echo $val ?>" id="<?php echo $val ?>" /></td>
   <?php endforeach; ?>
   </tr>
@@ -81,6 +87,7 @@
   <button style="float: left">Salvar</button><span class="loader" style="float:left; margin-left: 4px;display:none;"></span>
   </div>
 </div>
+
 
 <script type="text/javascript">
 $(document).ready(function() {

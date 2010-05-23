@@ -4,9 +4,9 @@ include_once('base_model.php');
 class Usuario_model extends Base_model
 {
   public $tipos = array('admin' => 'Administrador',
-      'adm' => 'Administrativo',
-      'director' => 'Director',
-      'profe' => 'Profesor',
+//      'adm' => 'Administrativo',
+//      'director' => 'Director',
+        'profe' => 'Profesor'
     );
   /**
    * Constructor donde se define la tabla y los campos

@@ -205,6 +205,9 @@ ul.half li{
 .error{
   color: #CB0000;
 }
+.notice{
+  color: #003000;
+}
 
 .pagination{
   padding: 8px 10px;

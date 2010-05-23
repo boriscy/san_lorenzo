@@ -12,13 +12,15 @@ class Notas extends Base
     $this->load->model('Alumno_model');
     // Credenciales para el controlador
     $this->credentials = array(
-      'index' => array('admin'),
+      'index' => array('admin', 'profe'),
       'new_import' => array('admin'),
       'create_import' => array('admin'),
-      'edit' => array('admin'),
-      'update' => array('admin'),
+      'edit' => array('admin', 'profe'),
+      'update' => array('admin', 'profe'),
       'destroy' => array('admin')
     );
+
+    $this->checkCredentials();
   }
 
   function index() {
